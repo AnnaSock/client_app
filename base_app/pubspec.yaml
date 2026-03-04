@@ -1,0 +1,26 @@
+name: base_app
+description: SuperApp Customer Hub
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.10.0 <5.0.0'
+  flutter: ">=3.24.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  intl_phone_field: ^3.2.0
+  micro_commons:
+    path: ../micro_commons
+  micro_core:
+    path: ../micro_core
+  go_router: ^17.1.0
+  flutter_launcher_icons: ^0.14.1
+  flutter_riverpod: ^3.2.1
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
