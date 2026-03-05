@@ -1,30 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:micro_commons/utils/colors.dart';
 
-
 class BoutonRouge extends StatelessWidget {
   final String text;
   final VoidCallback? onPressed;
+  final bool isDisabled;
 
   const BoutonRouge({
     super.key,
     required this.text,
     required this.onPressed,
+    this.isDisabled = false,
   });
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: onPressed,
+      onPressed: isDisabled
+          ? () {}
+          : onPressed,
       style: ElevatedButton.styleFrom(
-        backgroundColor: kPrimaryBordeaux,
+        backgroundColor: isDisabled ? rose : kPrimaryBordeaux,
         padding: EdgeInsets.zero,
         minimumSize: const Size.fromHeight(42),
         elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
-          side: const BorderSide(
-            color: kPrimaryBordeaux,
+          side: BorderSide(
+            color: isDisabled ? rose : kPrimaryBordeaux,
             width: 1.0,
           ),
         ),

@@ -8,6 +8,7 @@ const Color kTextLargeColor = Color(0xFF4A4B71);
 const Color kCustomerAppColor = Color(0xFF626ABB);
 const Color kSecondaryBlueColor = Color(0xFF282C5D);
 const Color kPrimaryBordeaux = Color(0xFF9B1A2B);
+const Color rose = Color(0xFFDCB1BA);
 
 
 const primaryColor = Color(0xFF282C5D);

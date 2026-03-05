@@ -5,19 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:micro_commons/components/bouton_rouge.dart';
 import 'package:micro_commons/components/clavier_numeric.dart';
-import 'package:micro_commons/components/custom_app_bar.dart';
+import 'package:micro_commons/components/custom_sliver_app_bar.dart';
 import 'package:micro_commons/utils/colors.dart';
 import 'package:micro_commons/utils/util.dart';
+import 'package:micro_commons/utils/void.dart';
 import 'package:pinput/pinput.dart';
 
 class OtpPage extends StatefulWidget {
-  final String? telephone;
-  final String? legalEntityCode;
-  final bool fromChangeSecretCodePage;
-  final bool fromResetPasswordCodePage;
-  final String? oldsecret;
-
-  const OtpPage({super.key, this.telephone,this.legalEntityCode,  this.fromChangeSecretCodePage = false, this.fromResetPasswordCodePage = false, this.oldsecret});
+  const OtpPage({super.key});
   @override
   State<OtpPage> createState() => _OtpPage();
 }
@@ -31,6 +26,7 @@ class _OtpPage extends State<OtpPage>  {
   Timer? _countdownTimer;
   int _remainingSeconds = 60;
   bool _isButtonEnabled = false;
+
   bool isFirstTime = true;
   bool _isSuccess = false;
 
@@ -41,13 +37,14 @@ class _OtpPage extends State<OtpPage>  {
   var indicatif = "221";
   bool _isLoading = false;
   FocusNode identifiantFocusNode = FocusNode();
-  bool _isButtonDisabled = true;
+  final bool _isButtonDisabled = true;
 
   String? _lastClipboardContent;
   bool _isListeningForSMS = false;
   String canal = "WhatsApp";
   String? channel;
   String? _errorMessage;
+  bool _isPinCompleted = false;
 
   @override
   void initState() {
@@ -132,64 +129,26 @@ class _OtpPage extends State<OtpPage>  {
     witchLanguage = Localizations.localeOf(context).languageCode;
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: whiteColor,
         body: GestureDetector(
-          onTap: () {
-            FocusScopeNode currentFocus = FocusScope.of(context);
-            if (!currentFocus.hasPrimaryFocus) {
-              currentFocus.unfocus();
-            }
-          },
+          onTap: () => unfocus(context),
           child: CustomScrollView(
             slivers: [
-              SliverAppBar(
-                expandedHeight: 103.0 * fem, // Initial height of the AppBar
-                pinned: true, // Keep the AppBar visible while scrolling
-                automaticallyImplyLeading: false,
-                flexibleSpace: Container(
-                  decoration: const BoxDecoration(color: primaryColor),
-                  child: CustomAppBar(
-                     title: "Verification",
-                    icon: IconButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      icon: const Icon(
-                        Icons.arrow_back_ios_sharp,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+              CustomSliverAppBar(title: "Vérification numéro téléphone"),
               SliverList(
                 delegate: SliverChildListDelegate(
                   [
                     Container(
-                      color: Colors.white,
+                      color: whiteColor,
                       child:  Form(
                         key: _formKey2,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: <Widget>[
-
-                            Stack(children: [
-                              Container(
-                                margin: EdgeInsets.fromLTRB(40.5 * fem,
-                                    30 * fem, 40.5 * fem, 10 * fem),
-                                padding: EdgeInsets.fromLTRB(21.5 * fem,
-                                    20 * fem, 21.5 * fem, 0 * fem),
-                                width: double.infinity,
-                                height: 100 * fem,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius:
-                                  BorderRadius.circular(100 * fem),
-                                ),
-                              ),
                               Container(
                                 margin: EdgeInsets.fromLTRB(0 * fem,
                                     30 * fem, 0 * fem, 22.54 * fem),
@@ -205,7 +164,6 @@ class _OtpPage extends State<OtpPage>  {
                                   ),
                                 ),
                               ),
-                            ]),
                             Center(
                               child: SizedBox(
                                 width: 327 * fem,
@@ -259,26 +217,12 @@ class _OtpPage extends State<OtpPage>  {
                                       submittedPinTheme: submittedPinTheme,
                                       length:4,
                                       pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
-                                      //obscureText: true,
-                                      //obscuringCharacter: "*",
                                       showCursor: true,
-                                      onCompleted: (pin) async {
-                                        if (pin.length == 4) {
-                                          String phoneNumberOTP;
-                                          if (widget.fromChangeSecretCodePage) {
-
-                                          } else {
-
-                                          }
-                                          try {
-                                          } catch (e) {
-                                            final snackbar = SnackBar(
-                                                content:
-                                                Text(e.toString()));
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(snackbar);
-                                          }
-                                        }
+                                      onCompleted: (pin) async {},
+                                      onChanged: (value) {
+                                        setState(() {
+                                          _isPinCompleted = value.length == 4;
+                                        });
                                       },
                                     ),
                                   ),
@@ -339,17 +283,6 @@ class _OtpPage extends State<OtpPage>  {
                                         });
                                         codeOtpController.clear();
                                         startCountdown();
-                                        String phoneNumberOTP;
-                                        if (widget.fromChangeSecretCodePage) {
-                                        } else {
-                                        }
-                                        String? motifOtp;
-                                        if (widget.fromResetPasswordCodePage || widget.fromChangeSecretCodePage){
-                                          motifOtp = null;
-                                        } else {
-                                          motifOtp = "ONBOARDING";
-                                        }
-
                                       },
                                       itemBuilder: (context) => [
                                         PopupMenuItem(
@@ -357,8 +290,8 @@ class _OtpPage extends State<OtpPage>  {
                                           child: Row(
                                             children: [
                                               Image.asset(
-                                                package: 'common_dependencies',
-                                                'assets/images/whatsapp_icon.png',
+                                                package: 'micro_commons',
+                                                'assets/images/whatsapp.png',
                                                 width: 20,
                                                 height: 20,
                                               ),
@@ -372,7 +305,7 @@ class _OtpPage extends State<OtpPage>  {
                                           child: Row(
                                             children: [
                                               Image.asset(
-                                                package: 'common_dependencies',
+                                                package: 'micro_commons',
                                                 'assets/images/sms.png',
                                                 width: 20,
                                                 height: 20,
@@ -405,7 +338,11 @@ class _OtpPage extends State<OtpPage>  {
                             Container(
                               margin: const EdgeInsets.symmetric(horizontal: 30),
                               width: double.infinity,
-                              child: BoutonRouge(text: "Vérifier", onPressed: ()=>{}),
+                              child: BoutonRouge(text: "Vérifier",
+                                  isDisabled: (!_isPinCompleted),
+                                  onPressed: (){
+
+                              }),
                             ),
                             const SizedBox(height: 10),
                             if (_errorMessage != null)
@@ -443,37 +380,4 @@ class _OtpPage extends State<OtpPage>  {
 
 }
 
-Widget _buildVerificationOption({
-  required IconData icon,
-  required String label,
-  required Color color,
-  required VoidCallback onTap,
-}) {
-  return InkWell(
-    onTap: onTap,
-    borderRadius: BorderRadius.circular(12),
-    child: Container(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-      decoration: BoxDecoration(
-        border: Border.all(color: color.withOpacity(0.3)),
-        borderRadius: BorderRadius.circular(12),
-        color: color.withOpacity(0.1),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, color: color, size: 20),
-          const SizedBox(width: 8),
-          Text(
-            label,
-            style: TextStyle(
-              color: color,
-              fontWeight: FontWeight.w600,
-              fontSize: 14,
-            ),
-          ),
-        ],
-      ),
-    ),
-  );
-}
+
