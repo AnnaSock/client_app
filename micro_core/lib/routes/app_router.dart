@@ -1,10 +1,9 @@
 library micro_core;
 
-import 'package:base_app/presentation/pages/otp_page.dart';
+import 'package:micro_core/routes/app_registry.dart';
+
+import 'import_route.dart';
 import 'package:go_router/go_router.dart';
-import 'package:base_app/presentation/pages/home_page.dart';
-import 'package:base_app/presentation/pages/inscription_page_1.dart';
-import 'package:base_app/presentation/pages/cgu_page.dart';
 
 final _router = GoRouter(
   initialLocation: '/home',
@@ -24,7 +23,13 @@ final _router = GoRouter(
     GoRoute(
       path: '/cgu',
       builder: (context, state) => const CguPage(),
-    )
+    ),
+    GoRoute(
+      path: '/code-secret',
+      builder: (context, state) => const CodeSecretPage(),
+    ),
+    
+    ...AppRegistry.microApps.expand((m) => m.routes)
   ],
   redirect: (context, state) {
     // TODO: Redirection basée sur état auth

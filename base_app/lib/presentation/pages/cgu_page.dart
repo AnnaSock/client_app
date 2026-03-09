@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:micro_commons/components/bouton_rouge.dart';
 import 'package:micro_commons/components/custom_sliver_app_bar.dart';
 import 'package:micro_commons/utils/colors.dart';
@@ -64,7 +65,7 @@ class _CguPageState extends State<CguPage> {
                                           CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              "J'accepte les termes et conditions",
+                                              "J'accepte les termes & conditions",
                                               style: CustomTextStyle
                                                   .labelTextStyle,
                                             ),
@@ -74,7 +75,11 @@ class _CguPageState extends State<CguPage> {
                                     ),
                                     Container(
                                       width: double.infinity,
-                                      child: BoutonRouge(text: "Accepter", onPressed: ()=>{}),
+                                      child: BoutonRouge(text: "Accepter", onPressed: ()=>{
+                                        if (isCGUChecked){
+                                        context.push("/code-secret")
+                                        }
+                                      }),
                                     ),
                                   ],
                                 ),

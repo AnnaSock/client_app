@@ -33,6 +33,7 @@ const Color debitColor = Color(0xFFE8122B);
 const textColor = Color(0xFF6CC4C7);
 const toggleBackgroundColor = Color(0xFF787880);
 const taxeColor = Color(0xFF2F92EE);
+const color = Color(0xFF667085);
 
 // Contacts Colors
 const contactYellow = Color(0xFFFCBE00);

@@ -218,3 +218,12 @@ final submittedPinTheme = defaultPinTheme.copyWith(
 final allowedCountries = countries
     .where((c) => ['SN', 'CI'].contains(c.code))
     .toList();
+
+
+String? validatePassword(String? password) {
+  RegExp regex = RegExp(r'^\d{4}$');
+  if (!regex.hasMatch(password!)) {
+    return 'Your password does not meet the requirements';
+  }
+  return null;
+}
