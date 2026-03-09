@@ -1,22 +1,13 @@
 // ignore_for_file: depend_on_referenced_packages
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl_phone_field/countries.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:micro_commons/components/bouton_rouge.dart';
-import 'package:micro_commons/components/custom_app_bar.dart';
+import 'package:micro_commons/components/custom_sliver_app_bar.dart';
 import 'package:micro_commons/utils/colors.dart';
 import 'dart:async';
-
 import 'package:micro_commons/utils/util.dart';
-
-
-final allowedCountries = countries
-    .where((c) => ['SN', 'CI'].contains(c.code))
-    .toList();
-
-
+import 'package:micro_commons/utils/void.dart';
 
 
 class InscriptionPage1 extends StatefulWidget
@@ -30,7 +21,6 @@ class _InscriptionPage1State extends State<InscriptionPage1>
 {
   final _formKey1 = GlobalKey<FormState>();
   final baseWidth = 375;
-
 
   var prenomController = TextEditingController();
   var nomController = TextEditingController();
@@ -48,27 +38,7 @@ class _InscriptionPage1State extends State<InscriptionPage1>
   bool _isButtonDisabled = true;
   String? isoCode2;
 
-  bool _isLoading = false;
-  String? whichLanguage, whichCountry, phoneLocation = "SN";
-  List<String> countryWithSMS = ["SN", "CI"];
-  String? legalEntityCode;
-  List<String> countryFavorites = [
-    "SN",
-    "CI",
-    "CM",
-    "GA",
-    "BF",
-    "ML",
-    "GN",
-    "KE"
-  ];
-  String? _phoneError;
-  final bool _submitted = false;
-  bool _isSuccess = false;
-  bool showLinear = false;
-
-
-
+  String? whichLanguage = "SN";
 
   @override
   void initState()
@@ -77,7 +47,6 @@ class _InscriptionPage1State extends State<InscriptionPage1>
     phoneController.addListener(_updateButtonState);
 
     const defaultCountryCode = '221';
-    legalEntityCode = legalEntityMap["+$defaultCountryCode"];
     indicatifController.text = defaultCountryCode;
     isoCode2 = "SN";
 
@@ -105,97 +74,20 @@ class _InscriptionPage1State extends State<InscriptionPage1>
     super.dispose();
   }
 
-  void validatePhoneNumber()
-{
-    setState(()
-{
-      if (phoneController.text.isEmpty)
-{
-        _phoneError = "error";
-      } else
-{
-        _phoneError = null;
-      }
-    });
-  }
-
-  final Map<String, String> legalEntityMap =
-{
-    '+221': 'INTOUCH_SA',
-    '+225': 'INTOUCH_CI',
-    '+223': 'INTOUCH_ML',
-    '+237': 'INTOUCH_CM',
-    '+224': 'INTOUCH_GN',
-    '+226': 'INTOUCH_BF',
-    '+254': 'INTOUCH_KE',
-    '+220': 'INTOUCH_GM',
-    '+241': 'INTOUCH_GA',
-    '+234': 'INTOUCH_NG',
-    '+256': 'INTOUCH_UG',
-    '+258': 'INTOUCH_MZ',
-    '+255': 'INTOUCH_TZ',
-    '+229': 'INTOUCH_BN',
-    '+233': 'INTOUCH_GH',
-    '+267': 'INTOUCH_BW',
-    '+265': 'INTOUCH_MW',
-    '+260': 'INTOUCH_ZM',
-    '+263': 'INTOUCH_ZW',
-    '+251': 'INTOUCH_ET',
-    '+250': 'INTOUCH_RW',
-    '+242': 'INTOUCH_CG',
-    '+243': 'INTOUCH_CD',
-    '+228': 'INTOUCH_TG',
-    '+235': 'INTOUCH_TD',
-    '+245': 'INTOUCH_GW',
-    '+222': 'INTOUCH_MR',
-    '+227': 'INTOUCH_NE',
-    '+236': 'INTOUCH_RCA',
-    '+27': 'INTOUCH_ZA',
-  
-};
-
-
-
   @override
   Widget build(BuildContext context)
 {
     double fem = MediaQuery.of(context).size.width / baseWidth;
-    whichLanguage = Localizations.localeOf(context).languageCode;
     double ffem = fem * 0.97;
     return Scaffold(
       backgroundColor: whiteColor,
       body: GestureDetector(
-        onTap: ()
-{
-          FocusScopeNode currentFocus = FocusScope.of(context);
-          if (!currentFocus.hasPrimaryFocus)
-{
-            currentFocus.unfocus();
-          }
-        },
+        onTap: () => unfocus(context),
         child: CustomScrollView(
           slivers: [
-            SliverAppBar(
-              expandedHeight: 103.0 * fem, // Initial height of the AppBar
-              pinned: true, // Keep the AppBar visible while scrolling
-              automaticallyImplyLeading: false,
-              flexibleSpace: Container(
-                decoration: const BoxDecoration(color: primaryColor),
-                child: CustomAppBar(
-                  title: "Inscription",
-                  icon: IconButton(
-                    onPressed: ()
-{
-                      Navigator.pop(context);
-                    },
-                    icon: const Icon(
-                      Icons.arrow_back_ios_sharp,
-                      color: whiteColor,
-                    ),
-                  ),
-                ),
-              ),
-            ),
+          CustomSliverAppBar(
+          title: "Inscription",
+        ),
             SliverList(
               delegate: SliverChildListDelegate(
                 [
@@ -206,7 +98,6 @@ class _InscriptionPage1State extends State<InscriptionPage1>
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          const SizedBox(height: 20),
                           Form(
                             key: _formKey1,
                             child: Column(
@@ -275,7 +166,6 @@ class _InscriptionPage1State extends State<InscriptionPage1>
                                 ),
                                 const SizedBox(height: 5),
                                 IntlPhoneField(
-
                                   countries: allowedCountries,
                                   controller: phoneController,
                                   focusNode: phoneFocusNode,
@@ -300,29 +190,27 @@ class _InscriptionPage1State extends State<InscriptionPage1>
                                 SizedBox(
                                   width: double.infinity,
                                   height: 50,
-                                  child: BoutonRouge(text: "Suivant",                                     onPressed: _isButtonDisabled
-                                      ? null
-                                      : ()
-                                  {
-                                    if (_formKey1.currentState!.validate())
-                                    {
-                                      // Navigation vers la prochaine page
-                                      context.push("/otp");
-                                    }
-                                  }),
+                                  child: BoutonRouge(
+                                    text: "Suivant",
+                                    isDisabled: _isButtonDisabled,
+                                    onPressed: ()
+{
+                                      if (_formKey1.currentState!.validate())
+{
+
+                                        context.push("/otp");
+                                      }
+                                    },
+                                  ),
                                 ),
+
                                 const SizedBox(height: 30),
 
                                 // Lien Se connecter
                                 InkWell(
                                   onTap: ()
 {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (_) => const Placeholder(), // Remplacer par Login
-                                      ),
-                                    );
+                                 context.go("/home");
                                   },
                                   child: Center(
                                     child: Column(

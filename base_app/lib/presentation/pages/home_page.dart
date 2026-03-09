@@ -76,7 +76,7 @@ class HomePage extends StatelessWidget {
                           ],
                         ),
                       ),
-                      const SizedBox(height: 14),
+                      const SizedBox(height: 30),
 
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
@@ -89,7 +89,7 @@ class HomePage extends StatelessWidget {
                                   text: "Se Connecter",
                                   onPressed: ()=> {}),
                             ),
-                            const SizedBox(height: 15),
+                            const SizedBox(height: 10),
                             SizedBox(
                               height: 46,
                               child: BoutonBlanc(

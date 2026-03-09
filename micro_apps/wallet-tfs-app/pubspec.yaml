@@ -8,6 +8,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  go_router: ^17.1.0
   micro_core:
     path: ../../micro_core
   micro_commons:

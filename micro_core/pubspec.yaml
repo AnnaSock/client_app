@@ -13,6 +13,8 @@ dependencies:
   go_router: ^17.1.0
   base_app:
     path: ../base_app
+  wallet_tfs_app:
+    path: ../micro_apps/wallet-tfs-app
 
 dev_dependencies:
   flutter_test:

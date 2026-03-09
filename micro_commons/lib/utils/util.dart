@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:micro_commons/utils/colors.dart';
 import 'package:micro_commons/utils/enum.dart';
+import 'package:intl_phone_field/countries.dart';
 import 'package:pinput/pinput.dart';
 
 TextStyle safeGoogleFont(
@@ -213,3 +214,16 @@ final focusedPinTheme = defaultPinTheme.copyDecorationWith(
 final submittedPinTheme = defaultPinTheme.copyWith(
   decoration: defaultPinTheme.decoration!.copyWith(color: bgCircleColor),
 );
+
+final allowedCountries = countries
+    .where((c) => ['SN', 'CI'].contains(c.code))
+    .toList();
+
+
+String? validatePassword(String? password) {
+  RegExp regex = RegExp(r'^\d{4}$');
+  if (!regex.hasMatch(password!)) {
+    return 'Your password does not meet the requirements';
+  }
+  return null;
+}

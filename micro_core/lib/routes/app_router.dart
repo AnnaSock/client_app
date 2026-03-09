@@ -1,9 +1,9 @@
 library micro_core;
 
-import 'package:base_app/presentation/pages/otp_page.dart';
+import 'package:micro_core/routes/app_registry.dart';
+
+import 'import_route.dart';
 import 'package:go_router/go_router.dart';
-import 'package:base_app/presentation/pages/home_page.dart';
-import 'package:base_app/presentation/pages/inscription_page_1.dart';
 
 final _router = GoRouter(
   initialLocation: '/home',
@@ -19,7 +19,17 @@ final _router = GoRouter(
     GoRoute(
       path: '/otp',
       builder: (context, state) => const OtpPage(),
-    )
+    ),
+    GoRoute(
+      path: '/cgu',
+      builder: (context, state) => const CguPage(),
+    ),
+    GoRoute(
+      path: '/code-secret',
+      builder: (context, state) => const CodeSecretPage(),
+    ),
+    
+    ...AppRegistry.microApps.expand((m) => m.routes)
   ],
   redirect: (context, state) {
     // TODO: Redirection basée sur état auth
@@ -36,19 +46,3 @@ class AppRouter {
 
 
 
-/// Contrat que chaque micro-app doit implémenter
-abstract class AppModule {
-  /// Nom unique du module (utile pour debug, logs, analytics)
-  String get name;
-
-  /// Routes exposées par le module
-  /// On utilise RouteBase pour supporter :
-  /// - GoRoute
-  /// - ShellRoute
-  /// - StatefulShellRoute
-  List<RouteBase> get routes;
-
-  /// Méthode optionnelle d'initialisation
-  /// (ex: injection dépendances, config, SDK, etc.)
-  Future<void> init() async {}
-}
