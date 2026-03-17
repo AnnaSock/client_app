@@ -1,5 +1,7 @@
+import 'package:base_app/presentation/props/code_secret_props.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:micro_commons/components/biometrie.dart';
 import 'package:micro_commons/components/bouton_rouge.dart';
 import 'package:micro_commons/components/custom_sliver_app_bar.dart';
 import 'package:micro_commons/utils/colors.dart';
@@ -77,7 +79,29 @@ class _CguPageState extends State<CguPage> {
                                       width: double.infinity,
                                       child: BoutonRouge(text: "Accepter", onPressed: ()=>{
                                         if (isCGUChecked){
-                                        context.push("/code-secret")
+                                        context.push(
+                                            "/code-secret",
+                                          extra: CodeSecretProps(
+                                              titre: "Inscription",
+                                              sousTitre: "Information d'accès",
+                                              image: "assets/images/ellipse.png",
+                                              paragraphe: "Votre code secret sera également utilisé comme code de transaction.",
+                                              input1: "Code Secret",
+                                              input2: "Confirmer votre code secret",
+                                              routeGo: (context) =>
+                                              {
+                                                showBiometricActivationModal(
+                                                    context,
+                                                    onActivate: ()
+                                                    {
+                                                      context.goNamed("walletHome");
+                                                    },
+                                                    onLater: ()
+                                                    {
+                                                    })
+                                              }
+                                          )
+                                        )
                                         }
                                       }),
                                     ),

@@ -1,4 +1,5 @@
 // ignore_for_file: depend_on_referenced_packages
+import 'package:base_app/presentation/props/otp_props.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
@@ -198,7 +199,12 @@ class _InscriptionPage1State extends State<InscriptionPage1>
                                       if (_formKey1.currentState!.validate())
 {
 
-                                        context.push("/otp");
+ context.push(
+    "/otp",
+  extra: OtpProps(
+      title: "Vérification numéro téléphone",
+      routeGo: (context) => context.push("/cgu"))
+);
                                       }
                                     },
                                   ),

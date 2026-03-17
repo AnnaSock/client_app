@@ -1,5 +1,3 @@
-library micro_core;
-
 import 'package:micro_core/routes/app_registry.dart';
 
 import 'import_route.dart';
@@ -17,16 +15,27 @@ final _router = GoRouter(
       builder: (context, state) => const InscriptionPage1(),
     ),
     GoRoute(
-      path: '/otp',
-      builder: (context, state) => const OtpPage(),
+      path: "/otp",
+      builder: (context, state) {
+        final props = state.extra as OtpProps;
+        return OtpPage(props: props);
+      },
     ),
+
     GoRoute(
       path: '/cgu',
       builder: (context, state) => const CguPage(),
     ),
     GoRoute(
       path: '/code-secret',
-      builder: (context, state) => const CodeSecretPage(),
+      builder: (context, state) {
+        final props = state.extra as CodeSecretProps;
+        return CodeSecretPage(props: props);
+      },
+    ),
+    GoRoute(
+      path: '/login',
+      builder: (context, state) =>  LoginPage(),
     ),
     
     ...AppRegistry.microApps.expand((m) => m.routes)

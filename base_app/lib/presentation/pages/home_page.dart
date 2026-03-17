@@ -87,7 +87,9 @@ class HomePage extends StatelessWidget {
                               height: 46,
                               child: BoutonRouge(
                                   text: "Se Connecter",
-                                  onPressed: ()=> {}),
+                                  onPressed: ()=> {
+                                    context.go("/login")
+                                  }),
                             ),
                             const SizedBox(height: 10),
                             SizedBox(

@@ -1,5 +1,3 @@
-
-
 import 'package:go_router/go_router.dart';
 
 /// Contrat que chaque micro-app doit implémenter
