@@ -1,9 +1,43 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:micro_commons/utils/colors.dart';
 import 'package:micro_commons/utils/enum.dart';
 import 'package:intl_phone_field/countries.dart';
 import 'package:pinput/pinput.dart';
+
+var formatter = NumberFormat('#,##0', 'en_US');
+
+String formatWithSpaces(double? number)
+{
+  String formattedNumber = "";
+  if(number != null)
+  {
+    formattedNumber = formatter.format(number.floor());
+  } else
+  {
+    formattedNumber = "0";
+  }
+
+  return formattedNumber.replaceAll(',', ' ');
+}
+
+TextStyle getHidedStyle(TextStyle? style)
+{
+  return TextStyle(
+    color: Colors.transparent,
+    fontSize: style!.fontSize,
+    fontFamily: style.fontFamily,
+    fontWeight: style.fontWeight,
+    shadows: const [
+      Shadow(color: Colors.grey, blurRadius: 37.0, offset: Offset(0, 0)),
+      Shadow(color: Colors.grey, blurRadius: 37.0, offset: Offset(0, 0)),
+      Shadow(color: Colors.grey, blurRadius: 37.0, offset: Offset(0, 0)),
+      Shadow(color: Colors.grey, blurRadius: 37.0, offset: Offset(0, 0)),
+    ],
+  );
+}
+
 
 TextStyle safeGoogleFont(
     String fontFamily, {
@@ -226,4 +260,22 @@ String? validatePassword(String? password) {
     return 'Your password does not meet the requirements';
   }
   return null;
+}
+
+
+String getInitials(String fullName) {
+  List<String> names = fullName.split(" ");
+  String initials = "";
+
+  if (names.isNotEmpty && names[0].isNotEmpty) {
+    // Prend la première lettre de chaque mot dans le nom
+    initials += names[0][0].toUpperCase();
+
+    if (names.length > 1) {
+      // Ajoute la première lettre du dernier mot si le nom a plus d'un mot
+      initials += names.last.isNotEmpty ? names.last[0].toUpperCase() : "";
+    }
+  }
+
+  return initials;
 }

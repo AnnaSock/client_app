@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:micro_core/routes/micro_route.dart';
+import 'package:wallet_tfs_app/views/pages/wallet_tfs_page.dart';
 
 class WalletTFSRoute implements MicroRoute {
   @override
@@ -17,13 +17,9 @@ class WalletTFSRoute implements MicroRoute {
   GoRoute(
   path: '/wallet',
   name: 'walletHome',
-  builder: (context, state) => const Text("ceci est le home"),
+  builder: (context, state) => WalletTfsPage(),
   ),
-  GoRoute(
-  path: '/wallet/transfer',
-  name: 'walletTransfer',
-  builder: (context, state) => const Text("ceci est un test"),
-  )
+
   ];
 
 

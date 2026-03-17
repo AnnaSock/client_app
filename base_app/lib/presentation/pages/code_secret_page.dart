@@ -1,18 +1,19 @@
+import 'package:base_app/presentation/props/code_secret_props.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:micro_commons/components/biometrie.dart';
+import 'package:micro_commons/components/bouton_rouge.dart';
 import 'package:micro_commons/components/custom_sliver_app_bar.dart';
 import 'package:micro_commons/utils/colors.dart';
 import 'package:micro_commons/utils/util.dart';
 import 'package:micro_commons/utils/void.dart';
 import 'package:micro_commons/utils/espacement.dart';
-import 'package:go_router/go_router.dart';
 import 'package:loading_animation_widget/src/build_loading_animation.dart';
 
 
 class CodeSecretPage extends StatefulWidget
 {
-  const CodeSecretPage({super.key});
+  final CodeSecretProps props;
+  const CodeSecretPage({super.key , required this.props});
 
   @override
   State<CodeSecretPage> createState() => _CodeSecretPageState();
@@ -50,7 +51,7 @@ class _CodeSecretPageState extends State<CodeSecretPage>
         child: CustomScrollView(
           slivers: [
             CustomSliverAppBar(
-              title: "Inscription",
+              title: widget.props.titre,
             ),
                
             SliverList(
@@ -77,7 +78,7 @@ class _CodeSecretPageState extends State<CodeSecretPage>
                                      const EdgeInsets.only(top: 5, left: 10, bottom: 30),
                                      alignment: Alignment.topCenter,
                                      child: Text(
-                                       "Informations d'accès",
+                                       widget.props.sousTitre,
                                        style: safeGoogleFont(
                                          'Lato',
                                          fontSize: 18,
@@ -97,7 +98,7 @@ class _CodeSecretPageState extends State<CodeSecretPage>
                                          height: 100.50 * fem,
                                          child: Image.asset(
                                            package: 'micro_commons',
-                                           'assets/images/ellipse.png',
+                                           widget.props.image,
                                            width: 60 * fem,
                                            height: 120 * fem,
                                          ),
@@ -111,7 +112,7 @@ class _CodeSecretPageState extends State<CodeSecretPage>
                                        alignment: WrapAlignment.center,
                                        children: [
                                          Text(
-                                           "Votre code secret sera également utilisé comme code de transaction.",
+                                           widget.props.paragraphe,
                                            style: TextStyle(
                                              color: hintColor,
                                              fontSize: 15 * fem,
@@ -124,7 +125,7 @@ class _CodeSecretPageState extends State<CodeSecretPage>
                                    ),
                                    20.h,
                                    Text(
-                                     "Code Secret",
+                                     widget.props.input1,
                                      style: safeGoogleFont(
                                        'Lato',
                                        fontSize: 14 * ffem,
@@ -191,7 +192,7 @@ class _CodeSecretPageState extends State<CodeSecretPage>
                                    ),
                                    20.h,
                                    Text(
-                                     "Confirmer votre code secret",
+                                     widget.props.input2,
                                      style: safeGoogleFont(
                                        'Lato',
                                        fontSize: 14 * ffem,
@@ -273,51 +274,7 @@ class _CodeSecretPageState extends State<CodeSecretPage>
                                      padding: const EdgeInsets.only(top: 20, bottom: 5),
                                      width: double.infinity,
                                      height: 70,
-                                     child: ElevatedButton.icon(
-                                       icon: _isLoading
-                                           ? LoadingAnimationWidget.flickr(
-                                         leftDotColor: primaryColor,
-                                         rightDotColor: secondaryColor,
-                                         size: 25,
-                                       )
-                                           : const Icon(null),
-                                       style: ButtonStyle(
-                                         backgroundColor: (_isLoading || !formIsValid)
-                                             ? WidgetStateProperty.all<Color>(
-                                             secondaryColor
-                                                 .withOpacity(0.8))
-                                             : WidgetStateProperty.all<Color>(
-                                             secondaryColor),
-                                         shape: WidgetStateProperty.all<
-                                             RoundedRectangleBorder>(
-                                           RoundedRectangleBorder(
-                                             borderRadius:
-                                             BorderRadius.circular(8.0),
-                                           ),
-                                         ),
-                                       ),
-                                       onPressed: () =>
-{
-                                         showBiometricActivationModal(
-                                             context,
-                                             onActivate: ()
-{
-                                           context.goNamed("walletHome");
-                                         },
-                                             onLater: ()
-{
-})
-                                       },
-                                       label: Text(
-                                         "Confirmer",
-                                         style: safeGoogleFont(
-                                           'Lato',
-                                           fontSize: 16,
-                                           fontWeight: FontWeight.w500,
-                                           color: Colors.white,
-                                         ),
-                                       ),
-                                     ),
+                                     child: BoutonRouge(text: "Confirmer", onPressed: () => widget.props.routeGo(context)),
                                    ),
                                  ],
                                ),

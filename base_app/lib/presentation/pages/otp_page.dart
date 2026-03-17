@@ -1,6 +1,7 @@
 
 import 'dart:async';
 
+import 'package:base_app/presentation/props/otp_props.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:micro_commons/components/otp_page/pop_pup.dart';
@@ -14,7 +15,9 @@ import 'package:micro_commons/utils/void.dart';
 import 'package:pinput/pinput.dart';
 
 class OtpPage extends StatefulWidget {
-  const OtpPage({super.key});
+  final OtpProps props;
+  const OtpPage({super.key, required this.props});
+
   @override
   State<OtpPage> createState() => _OtpPage();
 }
@@ -85,7 +88,7 @@ class _OtpPage extends State<OtpPage>  {
           onTap: () => unfocus(context),
           child: CustomScrollView(
             slivers: [
-              CustomSliverAppBar(title: "Vérification numéro téléphone"),
+              CustomSliverAppBar(title: widget.props.title),
               SliverList(
                 delegate: SliverChildListDelegate(
                   [
@@ -212,9 +215,8 @@ class _OtpPage extends State<OtpPage>  {
                               width: double.infinity,
                               child: BoutonRouge(text: "Vérifier",
                                   isDisabled: (!_isPinCompleted),
-                                  onPressed: (){
-                                    context.push("/cgu");
-                              }),
+                                  onPressed: _isPinCompleted ? () => widget.props.routeGo(context) : null,
+                              ),
                             ),
                             const SizedBox(height: 10),
                             if (_errorMessage != null)
