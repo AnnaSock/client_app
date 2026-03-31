@@ -1,8 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:micro_core/routes/app_router.dart';
+import 'package:micro_core/services/firebase_service.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  try {
+    final firebaseService = FirebaseService.instance;
+    await firebaseService.init();
+  } catch (e) {
+    debugPrint("Firebase error : $e");
+    return;
+  }
+
   runApp(
     const ProviderScope(child: MyApp()),
   );

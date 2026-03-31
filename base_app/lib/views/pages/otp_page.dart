@@ -1,9 +1,15 @@
 
 import 'dart:async';
 
-import 'package:base_app/presentation/props/otp_props.dart';
+import 'package:base_app/views/props/otp_props.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:micro_commons/blocs/inscription/inscription_bloc.dart';
+import 'package:micro_commons/providers/provider.dart';
+import 'package:micro_commons/blocs/inscription/inscription_event.dart';
+import 'package:micro_commons/blocs/inscription/inscription_state.dart';
 import 'package:micro_commons/components/otp_page/pop_pup.dart';
 import 'package:micro_commons/components/otp_page/pre_pin.dart';
 import 'package:micro_commons/components/bouton_rouge.dart';
@@ -14,15 +20,15 @@ import 'package:micro_commons/utils/util.dart';
 import 'package:micro_commons/utils/void.dart';
 import 'package:pinput/pinput.dart';
 
-class OtpPage extends StatefulWidget {
+class OtpPage extends ConsumerStatefulWidget {
   final OtpProps props;
   const OtpPage({super.key, required this.props});
 
   @override
-  State<OtpPage> createState() => _OtpPage();
+  ConsumerState<OtpPage> createState() => _OtpPage();
 }
 
-class _OtpPage extends State<OtpPage>  {
+class _OtpPage extends ConsumerState<OtpPage>  {
   final baseWidth = 375;
   final _formKey2 = GlobalKey<FormState>();
   var codeOtpController = TextEditingController();
@@ -80,13 +86,30 @@ class _OtpPage extends State<OtpPage>  {
   @override
   Widget build(BuildContext context) {
     double fem = MediaQuery.of(context).size.width / baseWidth;
+    final inscriptionBloc = ref.read(inscriptionBlocProvider);
 
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: whiteColor,
-        body: GestureDetector(
-          onTap: () => unfocus(context),
-          child: CustomScrollView(
+    return BlocProvider<InscriptionBloc>.value(
+      value: inscriptionBloc,
+      child: SafeArea(
+        child: Scaffold(
+          backgroundColor: whiteColor,
+          body: BlocListener<InscriptionBloc, InscriptionState>(
+            listener: (context, state) {
+              if (state is OtpVerified) {
+                widget.props.routeGo(context);
+              } else if (state is InscriptionError) {
+                setState(() {
+                  _errorMessage = state.message;
+                });
+              } else if (state is InscriptionLoading) {
+                setState(() {
+                  _errorMessage = null;
+                });
+              }
+            },
+            child: GestureDetector(
+              onTap: () => unfocus(context),
+              child: CustomScrollView(
             slivers: [
               CustomSliverAppBar(title: widget.props.title),
               SliverList(
@@ -116,21 +139,21 @@ class _OtpPage extends State<OtpPage>  {
                                     width: double.infinity,
                                     height: double.infinity,
                                     child: Pinput(
-                                      androidSmsAutofillMethod: AndroidSmsAutofillMethod.smsRetrieverApi,
-                                      controller: codeOtpController,
+                                        controller: codeOtpController,
                                       defaultPinTheme: defaultPinTheme,
                                       separator: const SizedBox(width: 20),
                                       focusedPinTheme: focusedPinTheme,
                                       submittedPinTheme: submittedPinTheme,
-                                      length:4,
+                                      length: 6,
                                       pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
                                       showCursor: true,
-                                      onCompleted: (pin) async {},
-                                      onChanged: (value) {
-                                        setState(() {
-                                          _isPinCompleted = value.length == 4;
-                                        });
-                                      },
+                                      androidSmsAutofillMethod: AndroidSmsAutofillMethod.none,
+                                    onCompleted: (pin) async {},
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _isPinCompleted = value.length == 6;
+                                      });
+                                    },
                                     ),
                                   ),
                                 ),
@@ -213,9 +236,16 @@ class _OtpPage extends State<OtpPage>  {
                             Container(
                               margin: const EdgeInsets.symmetric(horizontal: 30),
                               width: double.infinity,
-                              child: BoutonRouge(text: "Vérifier",
-                                  isDisabled: (!_isPinCompleted),
-                                  onPressed: _isPinCompleted ? () => widget.props.routeGo(context) : null,
+                              child: BoutonRouge(
+                                text: "Vérifier",
+                                isDisabled: (!_isPinCompleted),
+                                onPressed: _isPinCompleted
+                                    ? () {
+                                        inscriptionBloc.add(
+                                          VerifyOtpEvent(codeOtpController.text),
+                                        );
+                                      }
+                                    : null,
                               ),
                             ),
                             const SizedBox(height: 10),
@@ -248,7 +278,7 @@ class _OtpPage extends State<OtpPage>  {
           ),
         ),
       ),
-    );
+    )));
   }
 
 

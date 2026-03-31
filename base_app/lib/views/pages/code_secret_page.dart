@@ -1,4 +1,4 @@
-import 'package:base_app/presentation/props/code_secret_props.dart';
+import 'package:base_app/views/props/code_secret_props.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:micro_commons/components/bouton_rouge.dart';
