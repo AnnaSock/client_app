@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:wallet_tfs_app/views/components/balance_card.dart';
 import 'package:wallet_tfs_app/views/components/custom_app_bar.dart';
 import 'package:wallet_tfs_app/views/components/custom_drawer.dart';
+import 'package:wallet_tfs_app/views/pages/transfert.dart';
 
 class HomeTFSPage extends StatefulWidget
 {
@@ -86,7 +87,7 @@ class _HomeTFSPageState extends State<HomeTFSPage> with SingleTickerProviderStat
 {
 
     return [
-      Container(color: whiteColor, padding: const EdgeInsets.symmetric(vertical: 10), child: Text("Transfert")),
+      Container(color: whiteColor, padding: const EdgeInsets.symmetric(vertical: 10), child: TransfertTfsSegment()),
       Container(
           color: whiteColor,
           padding: const EdgeInsets.symmetric(vertical: 10),

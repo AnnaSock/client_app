@@ -15,6 +15,11 @@ dependencies:
     path: ../base_app
   wallet_tfs_app:
     path: ../micro_apps/wallet-tfs-app
+  bceao_pi:
+    path: ../micro_apps/bceao-pi
+  firebase_core: ^4.6.0
+  firebase_auth: ^6.3.0
+  cloud_firestore: ^6.2.0
 
 dev_dependencies:
   flutter_test:
